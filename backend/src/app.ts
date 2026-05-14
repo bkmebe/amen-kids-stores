@@ -52,16 +52,23 @@ if (env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Health check
 app.get('/api/health', async (_req, res) => {
-  const { createClient } = await import('@supabase/supabase-js');
-  const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY);
-  const { data: users, error } = await sb.from('users').select('id, email, role').limit(5);
+  const { supabase } = await import('./config/supabase');
+  const { data: users, error, status, statusText } = await supabase
+    .from('users')
+    .select('id, email, role');
   res.json({
     status: 'OK',
     uptime: process.uptime(),
     environment: env.NODE_ENV,
     timestamp: new Date().toISOString(),
     supabaseUrl: env.SUPABASE_URL,
-    dbCheck: { userCount: users?.length || 0, users: users?.map(u => ({ email: u.email, role: u.role })), error: error?.message },
+    dbCheck: {
+      userCount: users?.length || 0,
+      users: users?.map(u => ({ email: u.email, role: u.role })),
+      error: error ? { message: error.message, code: error.code, details: error.details, hint: error.hint } : null,
+      httpStatus: status,
+      httpStatusText: statusText,
+    },
   });
 });
 
