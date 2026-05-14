@@ -17,6 +17,9 @@ import { authenticate } from './middleware/auth.middleware';
 
 const app = express();
 
+// Trust proxy (required for Render, Railway, etc.)
+app.set('trust proxy', 1);
+
 // Security
 app.use(helmet());
 app.use(cors({
