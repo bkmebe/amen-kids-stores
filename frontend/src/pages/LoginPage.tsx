@@ -110,16 +110,6 @@ export const LoginPage: React.FC = () => {
               {loading ? t('loggingIn') : t('login')}
             </Button>
           </form>
-
-          {/* Hint */}
-          <div className="mt-6 p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
-            <p className="text-xs text-indigo-300 text-center">
-              Admin: <span className="text-indigo-200 font-mono">admin@amenkids.com</span> / <span className="text-indigo-200 font-mono">amen@1234</span>
-            </p>
-            <p className="text-xs text-indigo-300 text-center">
-              Sales: <span className="text-indigo-200 font-mono">sales@amenkids.com</span> / <span className="text-indigo-200 font-mono">sales@1234</span>
-            </p>
-          </div>
         </div>
       </motion.div>
     </div>

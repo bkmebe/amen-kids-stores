@@ -20,7 +20,16 @@ const app = express();
 // Security
 app.use(helmet());
 app.use(cors({
-  origin: [env.FRONTEND_URL, 'https://amen-kids-store.vercel.app'],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc)
+    if (!origin) return callback(null, true);
+    // Allow localhost in development
+    if (origin.includes('localhost')) return callback(null, true);
+    // Allow all Vercel deployments
+    if (origin.includes('vercel.app')) return callback(null, true);
+    // Allow custom domains
+    callback(null, true);
+  },
   credentials: true,
 }));
 
