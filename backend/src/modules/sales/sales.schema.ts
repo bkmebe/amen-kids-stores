@@ -7,6 +7,6 @@ export const createSaleSchema = z.object({
   payment_method: z.enum(['cash', 'bank_transfer']),
   bank_name: z.string().optional(),
 }).refine(
-  (data) => data.payment_method !== 'bank_transfer' || (data.bank_name && data.bank_name.length > 0),
+  (data: any) => data.payment_method !== 'bank_transfer' || (data.bank_name && data.bank_name.length > 0),
   { message: 'Bank name is required for mobile banking', path: ['bank_name'] }
 );
