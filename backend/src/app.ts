@@ -49,7 +49,7 @@ app.use(cors({
 
 // Rate limiting
 const limiter = rateLimit({ windowMs: 60 * 1000, max: 100 });
-const loginLimiter = rateLimit({ windowMs: 60 * 1000, max: 5, message: 'Too many login attempts' });
+const loginLimiter = rateLimit({ windowMs: 60 * 1000, max: 10, message: 'Too many login attempts', skipFailedRequests: true });
 
 app.use('/api/auth/login', loginLimiter);
 app.use(limiter);
