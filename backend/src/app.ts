@@ -23,16 +23,27 @@ app.set('trust proxy', 1);
 // Security
 app.use(helmet());
 app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (mobile apps, curl, etc)
-    if (!origin) return callback(null, true);
-    // Allow localhost in development
-    if (origin.includes('localhost')) return callback(null, true);
-    // Allow all Vercel deployments
-    if (origin.includes('vercel.app')) return callback(null, true);
-    // Allow custom domains
-    callback(null, true);
+  origin: function (origin, callback) {
+
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    const allowedOrigins = [
+      "http://localhost:5173",
+      "https://amen-kids-stores.vercel.app"
+    ];
+
+    if (
+      allowedOrigins.includes(origin) ||
+      origin.includes("vercel.app")
+    ) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("Not allowed by CORS"));
   },
+
   credentials: true,
 }));
 
