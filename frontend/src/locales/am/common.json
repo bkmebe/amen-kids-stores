@@ -102,5 +102,7 @@
   "mobileBanking": "ሞባይል ባንኪንግ",
   "cashPayment": "በጥሬ ገንዘብ ይክፈሉ",
   "bankTransfer": "በባንክ ያስተላልፉ",
-  "selectBank": "ባንክ ይምረጡ"
+  "selectBank": "ባንክ ይምረጡ",
+  "searchProducts": "ምርቶችን በስም፣ ምድብ፣ መጠን ይፈልጉ...",
+  "searchSales": "ሽያጮችን በምርት፣ ምድብ፣ ክፍያ ይፈልጉ..."
 }

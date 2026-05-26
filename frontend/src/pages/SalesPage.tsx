@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { ShoppingCart, Plus, TrendingUp, DollarSign, Package, Banknote, Building2 } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { ShoppingCart, Plus, TrendingUp, DollarSign, Package, Banknote, Building2, Search, ChevronDown, X } from 'lucide-react';
+import { useForm, Controller } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { salesApi } from '../api/sales.api';
 import { productsApi } from '../api/products.api';
-import { CreateSaleInput } from '../types';
+import { CreateSaleInput, Product } from '../types';
 import { Modal } from '../components/ui/Modal';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -42,10 +42,143 @@ const ETHIOPIAN_BANKS = [
   'M-PESA',
 ];
 
+// ─── Searchable Product Picker ─────────────────────────────────────
+interface ProductPickerProps {
+  products: Product[];
+  value: string;
+  onChange: (id: string) => void;
+  error?: string;
+}
+
+const ProductPicker: React.FC<ProductPickerProps> = ({ products, value, onChange, error }) => {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const inStock = useMemo(() => products.filter((p) => p.quantity > 0), [products]);
+
+  const filtered = useMemo(() => {
+    if (!search.trim()) return inStock;
+    const q = search.toLowerCase();
+    return inStock.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.category?.toLowerCase().includes(q) ||
+        p.supplier_name?.toLowerCase().includes(q) ||
+        p.size?.toLowerCase().includes(q)
+    );
+  }, [search, inStock]);
+
+  const selected = products.find((p) => p.id === value);
+
+  // Close on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const handleSelect = (id: string) => {
+    onChange(id);
+    setSearch('');
+    setOpen(false);
+  };
+
+  const handleClear = () => {
+    onChange('');
+    setSearch('');
+    inputRef.current?.focus();
+  };
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      {/* Selected display or search input */}
+      <div
+        className={`input flex items-center gap-2 cursor-pointer ${error ? 'border-red-400' : ''} ${open ? 'ring-2 ring-indigo-300 border-indigo-400' : ''}`}
+        onClick={() => { setOpen(true); setTimeout(() => inputRef.current?.focus(), 50); }}
+      >
+        <Search size={14} className="text-indigo-400 shrink-0" />
+        {selected && !open ? (
+          <div className="flex items-center justify-between w-full">
+            <span className="text-sm text-indigo-900 font-medium truncate">
+              {selected.name}{selected.size ? ` (${selected.size})` : ''} — {formatCurrency(selected.selling_price)}
+            </span>
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); handleClear(); }}
+              className="p-0.5 rounded hover:bg-indigo-100 transition-colors"
+            >
+              <X size={14} className="text-indigo-400" />
+            </button>
+          </div>
+        ) : (
+          <input
+            ref={inputRef}
+            type="text"
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setOpen(true); }}
+            onFocus={() => setOpen(true)}
+            placeholder={t('searchProducts') || 'Search products by name, category, size...'}
+            className="flex-1 bg-transparent border-none outline-none text-sm text-indigo-900 placeholder-indigo-300"
+          />
+        )}
+        <ChevronDown size={14} className={`text-indigo-400 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </div>
+
+      {/* Dropdown */}
+      {open && (
+        <div className="absolute z-50 left-0 right-0 mt-1 max-h-60 overflow-y-auto bg-white rounded-xl border border-indigo-100 shadow-xl animate-in fade-in slide-in-from-top-1">
+          {filtered.length === 0 ? (
+            <div className="px-4 py-6 text-center text-sm text-indigo-400">
+              <Package size={24} className="mx-auto mb-2 opacity-50" />
+              <p>{t('noProducts') || 'No products found'}</p>
+              {search && <p className="text-xs mt-1">Try a different search term</p>}
+            </div>
+          ) : (
+            filtered.map((p) => (
+              <div
+                key={p.id}
+                className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer transition-colors hover:bg-indigo-50 ${value === p.id ? 'bg-indigo-50 border-l-2 border-indigo-500' : ''}`}
+                onClick={() => handleSelect(p.id)}
+              >
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center shrink-0">
+                  <Package size={14} className="text-indigo-500" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-indigo-900 truncate">
+                    {p.name}{p.size ? ` (${p.size})` : ''}
+                  </p>
+                  <p className="text-[11px] text-indigo-400">
+                    {p.category} {p.supplier_name ? `• ${p.supplier_name}` : ''}
+                  </p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-sm font-bold text-indigo-700">{formatCurrency(p.selling_price)}</p>
+                  <p className={`text-[10px] font-medium ${p.quantity <= 5 ? 'text-red-500' : 'text-emerald-500'}`}>
+                    Stock: {p.quantity}
+                  </p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ─── Sales Page ────────────────────────────────────────────────────
 export const SalesPage: React.FC = () => {
   const { t } = useTranslation();
   const qc = useQueryClient();
   const [modalOpen, setModalOpen] = useState(false);
+  const [salesSearch, setSalesSearch] = useState('');
 
   const { data: sales = [], isLoading } = useQuery({
     queryKey: ['sales'],
@@ -75,9 +208,22 @@ export const SalesPage: React.FC = () => {
     onError: (err) => toast.error(getErrorMessage(err)),
   });
 
-  // Sale form with discount, payment method, and preview
+  // Filter sales by search
+  const filteredSales = useMemo(() => {
+    if (!salesSearch.trim()) return sales;
+    const q = salesSearch.toLowerCase();
+    return sales.filter(
+      (s) =>
+        s.product?.name?.toLowerCase().includes(q) ||
+        s.product?.category?.toLowerCase().includes(q) ||
+        s.payment_method?.toLowerCase().includes(q) ||
+        s.bank_name?.toLowerCase().includes(q)
+    );
+  }, [sales, salesSearch]);
+
+  // Sale form with discount, payment method, searchable product picker, and preview
   const SaleForm = () => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<CreateSaleInput>({
+    const { register, handleSubmit, watch, control, formState: { errors } } = useForm<CreateSaleInput>({
       defaultValues: { discount: 0, payment_method: 'cash' },
     });
     const selectedProductId = watch('product_id');
@@ -95,19 +241,19 @@ export const SalesPage: React.FC = () => {
       <form onSubmit={handleSubmit((data) => createMutation.mutate(data))} className="space-y-4">
         <div className="form-group">
           <label className="label">{t('product')} *</label>
-          <select
-            className={`input cursor-pointer ${errors.product_id ? 'border-red-400' : ''}`}
-            {...register('product_id', { required: 'Product is required' })}
-          >
-            <option value="">{t('selectProduct')}</option>
-            {products
-              .filter((p) => p.quantity > 0)
-              .map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}{p.size ? ` (${p.size})` : ''} — {formatCurrency(p.selling_price)} (Stock: {p.quantity})
-                </option>
-              ))}
-          </select>
+          <Controller
+            name="product_id"
+            control={control}
+            rules={{ required: 'Product is required' }}
+            render={({ field }) => (
+              <ProductPicker
+                products={products}
+                value={field.value || ''}
+                onChange={field.onChange}
+                error={errors.product_id?.message}
+              />
+            )}
+          />
           {errors.product_id && <p className="error-text">{errors.product_id.message}</p>}
         </div>
 
@@ -264,12 +410,25 @@ export const SalesPage: React.FC = () => {
         </div>
       )}
 
+      {/* Search sales records */}
+      <div className="relative">
+        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-indigo-400" />
+        <input
+          type="text"
+          value={salesSearch}
+          onChange={(e) => setSalesSearch(e.target.value)}
+          placeholder={t('searchSales') || 'Search sales by product, category, payment...'}
+          className="input pl-10 w-full"
+          id="search-sales-input"
+        />
+      </div>
+
       {/* Sales table */}
       <div className="table-container">
-        {sales.length === 0 ? (
+        {filteredSales.length === 0 ? (
           <div className="empty-state">
             <ShoppingCart size={40} />
-            <p className="font-medium">{t('noSales')}</p>
+            <p className="font-medium">{salesSearch ? 'No matching sales found' : t('noSales')}</p>
           </div>
         ) : (
           <table className="table">
@@ -287,7 +446,7 @@ export const SalesPage: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {sales.map((sale) => (
+              {filteredSales.map((sale) => (
                 <tr key={sale.id}>
                   <td>
                     <div className="flex items-center gap-2">

@@ -102,5 +102,7 @@
   "mobileBanking": "Mobile Banking",
   "cashPayment": "Pay with cash",
   "bankTransfer": "Transfer via bank",
-  "selectBank": "Select Bank"
+  "selectBank": "Select Bank",
+  "searchProducts": "Search products by name, category, size...",
+  "searchSales": "Search sales by product, category, payment..."
 }
