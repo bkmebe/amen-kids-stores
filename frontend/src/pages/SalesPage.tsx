@@ -66,7 +66,7 @@ const ProductPicker: React.FC<ProductPickerProps> = ({ products, value, onChange
       (p) =>
         p.name.toLowerCase().includes(q) ||
         p.category?.toLowerCase().includes(q) ||
-        p.supplier_name?.toLowerCase().includes(q) ||
+        p.supplier?.toLowerCase().includes(q) ||
         p.size?.toLowerCase().includes(q)
     );
   }, [search, inStock]);
@@ -155,7 +155,7 @@ const ProductPicker: React.FC<ProductPickerProps> = ({ products, value, onChange
                     {p.name}{p.size ? ` (${p.size})` : ''}
                   </p>
                   <p className="text-[11px] text-indigo-400">
-                    {p.category} {p.supplier_name ? `• ${p.supplier_name}` : ''}
+                    {p.category} {p.supplier ? `• ${p.supplier}` : ''}
                   </p>
                 </div>
                 <div className="text-right shrink-0">
