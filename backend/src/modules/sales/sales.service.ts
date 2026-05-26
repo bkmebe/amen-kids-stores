@@ -2,6 +2,7 @@ import { supabase } from '../../config/supabase';
 import { ApiError } from '../../utils/ApiError';
 import { productsService } from '../products/products.service';
 import { calculateProfit } from '../../utils/calculations';
+import { getStartOfTodayInEAT } from '../../utils/date';
 import { Sale, CreateSaleInput, TodaySalesSummary } from './sales.types';
 
 export const salesService = {
@@ -85,9 +86,7 @@ export const salesService = {
   },
 
   async getTodaySummary(): Promise<TodaySalesSummary> {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayStr = today.toISOString();
+    const todayStr = getStartOfTodayInEAT().toISOString();
 
     const { data, error } = await supabase
       .from('sales')

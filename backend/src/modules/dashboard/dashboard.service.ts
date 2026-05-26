@@ -1,12 +1,12 @@
 import { supabase } from '../../config/supabase';
 import { ApiError } from '../../utils/ApiError';
 import { sumArray } from '../../utils/calculations';
+import { getStartOfTodayInEAT } from '../../utils/date';
 
 export const dashboardService = {
   async getSummary() {
     const now = new Date();
-    const todayStart = new Date(now);
-    todayStart.setHours(0, 0, 0, 0);
+    const todayStart = getStartOfTodayInEAT();
 
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
