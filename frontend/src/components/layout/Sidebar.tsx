@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   LayoutDashboard, Package, ShoppingCart, Receipt,
-  BarChart3, Settings, LogOut
+  BarChart3, Settings, LogOut, ShoppingBag
 } from 'lucide-react';
 import { useAuthStore } from '../../app/store';
 import { authApi } from '../../api/auth.api';
@@ -14,6 +14,7 @@ const allNavItems = [
   { path: '/dashboard', icon: LayoutDashboard, key: 'dashboard', roles: ['admin'] },
   { path: '/inventory', icon: Package, key: 'inventory', roles: ['admin', 'sales'] },
   { path: '/sales', icon: ShoppingCart, key: 'sales', roles: ['admin', 'sales'] },
+  { path: '/purchases', icon: ShoppingBag, key: 'purchases', roles: ['admin'] },
   { path: '/expenses', icon: Receipt, key: 'expenses', roles: ['admin'] },
   { path: '/reports', icon: BarChart3, key: 'reports', roles: ['admin'] },
   { path: '/settings', icon: Settings, key: 'settings', roles: ['admin'] },

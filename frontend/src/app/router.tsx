@@ -10,6 +10,7 @@ import { PageSpinner } from '../components/ui/Spinner';
 const LoginPage = lazy(() => import('../pages/LoginPage').then(m => ({ default: m.LoginPage })));
 const DashboardPage = lazy(() => import('../pages/DashboardPage').then(m => ({ default: m.DashboardPage })));
 const ProductsPage = lazy(() => import('../pages/ProductsPage').then(m => ({ default: m.ProductsPage })));
+const PurchasesPage = lazy(() => import('../pages/PurchasesPage').then(m => ({ default: m.PurchasesPage })));
 const SalesPage = lazy(() => import('../pages/SalesPage').then(m => ({ default: m.SalesPage })));
 const ExpensesPage = lazy(() => import('../pages/ExpensesPage').then(m => ({ default: m.ExpensesPage })));
 const ReportsPage = lazy(() => import('../pages/ReportsPage').then(m => ({ default: m.ReportsPage })));
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
               {
                 path: 'dashboard',
                 element: <Suspense fallback={<PageSpinner />}><DashboardPage /></Suspense>,
+              },
+              {
+                path: 'purchases',
+                element: <Suspense fallback={<PageSpinner />}><PurchasesPage /></Suspense>,
               },
               {
                 path: 'expenses',

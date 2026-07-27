@@ -12,6 +12,7 @@ import salesRoutes from './modules/sales/sales.routes';
 import expensesRoutes from './modules/expenses/expenses.routes';
 import reportsRoutes from './modules/reports/reports.routes';
 import dashboardRoutes from './modules/dashboard/dashboard.routes';
+import purchasesRoutes from './modules/purchases/purchases.routes';
 import { reportsController } from './modules/reports/reports.controller';
 import { authenticate } from './middleware/auth.middleware';
 
@@ -78,6 +79,7 @@ app.use('/api/sales', salesRoutes);
 app.use('/api/expenses', expensesRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/purchases', purchasesRoutes);
 
 // Analytics routes (flat on /api/analytics)
 app.get('/api/analytics/sales', authenticate, reportsController.salesAnalytics);

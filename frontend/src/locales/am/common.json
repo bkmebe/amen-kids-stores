@@ -1,6 +1,7 @@
 {
   "dashboard": "ዳሽቦርድ",
   "inventory": "ክምችት",
+  "purchases": "ግዢዎች",
   "sales": "ሽያጭ",
   "expenses": "ወጪዎች",
   "reports": "ሪፖርቶች",
@@ -41,6 +42,7 @@
   "addProduct": "ምርት ጨምር",
   "editProduct": "ምርት አስተካክል",
   "deleteProduct": "ምርት ሰርዝ",
+  "addPurchase": "ግዢ ጨምር",
   "recordSale": "ሽያጭ ምዝግብ",
   "addExpense": "ወጪ ጨምር",
   "totalRevenue": "ጠቅላላ ገቢ",
@@ -102,7 +104,11 @@
   "mobileBanking": "ሞባይል ባንኪንግ",
   "cashPayment": "በጥሬ ገንዘብ ይክፈሉ",
   "bankTransfer": "በባንክ ያስተላልፉ",
-  "selectBank": "ባንክ ይምረጡ",
   "searchProducts": "ምርቶችን በስም፣ ምድብ፣ መጠን ይፈልጉ...",
-  "searchSales": "ሽያጮችን በምርት፣ ምድብ፣ ክፍያ ይፈልጉ..."
+  "searchSales": "ሽያጮችን በምርት፣ ምድብ፣ ክፍያ ይፈልጉ...",
+  "noPurchases": "ምንም ግዢ አልተገኘም",
+  "costPerUnit": "የአንድ ዋጋ",
+  "quantityPurchased": "የተገዛ መጠን",
+  "totalCost": "ጠቅላላ ወጪ",
+  "searchPurchases": "በምርት፣ አቅራቢ፣ ክፍያ ይፈልጉ..."
 }

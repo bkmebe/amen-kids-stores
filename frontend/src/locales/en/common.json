@@ -1,6 +1,7 @@
 {
   "dashboard": "Dashboard",
   "inventory": "Inventory",
+  "purchases": "Purchases",
   "sales": "Sales",
   "expenses": "Expenses",
   "reports": "Reports",
@@ -41,6 +42,7 @@
   "addProduct": "Add Product",
   "editProduct": "Edit Product",
   "deleteProduct": "Delete Product",
+  "addPurchase": "Add Purchase",
   "recordSale": "Record Sale",
   "addExpense": "Add Expense",
   "totalRevenue": "Total Revenue",
@@ -102,7 +104,11 @@
   "mobileBanking": "Mobile Banking",
   "cashPayment": "Pay with cash",
   "bankTransfer": "Transfer via bank",
-  "selectBank": "Select Bank",
   "searchProducts": "Search products by name, category, size...",
-  "searchSales": "Search sales by product, category, payment..."
+  "searchSales": "Search sales by product, category, payment...",
+  "noPurchases": "No purchases found",
+  "costPerUnit": "Cost Per Unit",
+  "quantityPurchased": "Quantity Purchased",
+  "totalCost": "Total Cost",
+  "searchPurchases": "Search by product, supplier, payment..."
 }
