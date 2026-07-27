@@ -355,7 +355,7 @@ export const SalesPage: React.FC = () => {
                 <div className="flex items-center justify-between text-indigo-400">
                   <span className="text-xs">{t('paymentMethod')}</span>
                   <span className="text-xs font-medium">
-                    {paymentMethod === 'cash' ? '💵 ' + t('cash') : '🏦 ' + t('mobileBanking')}
+                    {paymentMethod === 'cash' ? t('cash') : t('mobileBanking')}
                   </span>
                 </div>
               </>
@@ -485,13 +485,13 @@ export const SalesPage: React.FC = () => {
                   <td>
                     {sale.payment_method === 'bank_transfer' ? (
                       <div>
-                        <Badge variant="info">🏦 {t('mobileBanking')}</Badge>
+                        <Badge variant="info">{t('mobileBanking')}</Badge>
                         {sale.bank_name && (
                           <p className="text-[10px] text-indigo-400 mt-0.5 truncate max-w-[120px]">{sale.bank_name}</p>
                         )}
                       </div>
                     ) : (
-                      <Badge variant="success">💵 {t('cash')}</Badge>
+                      <Badge variant="success">{t('cash')}</Badge>
                     )}
                   </td>
                   <td className="text-indigo-400 text-xs">{formatDateTime(sale.created_at)}</td>

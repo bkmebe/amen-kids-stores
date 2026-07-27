@@ -518,13 +518,13 @@ export const PurchasesPage: React.FC = () => {
                   <td>
                     {purchase.payment_method === 'bank_transfer' ? (
                       <div>
-                        <Badge variant="info">🏦 {t('mobileBanking')}</Badge>
+                        <Badge variant="info">{t('mobileBanking')}</Badge>
                         {purchase.bank_name && (
                           <p className="text-[10px] text-indigo-400 mt-0.5 truncate max-w-[120px]">{purchase.bank_name}</p>
                         )}
                       </div>
                     ) : (
-                      <Badge variant="success">💵 {t('cash')}</Badge>
+                      <Badge variant="success">{t('cash')}</Badge>
                     )}
                   </td>
                   <td>
