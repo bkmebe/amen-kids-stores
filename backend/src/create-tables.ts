@@ -92,7 +92,7 @@ async function createTables() {
     console.log(`  Executing: ${stmt.substring(0, 60)}...`);
     const { error } = await supabase.rpc('exec_sql', { sql: stmt + ';' });
     if (error) {
-      console.log(`  ⚠️ RPC not available: ${error.message}`);
+      console.log(`  RPC not available: ${error.message}`);
       break;
     }
   }

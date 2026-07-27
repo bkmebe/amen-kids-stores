@@ -117,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
                 {lowStockProducts.length > 0 && (
                   <div>
                     <p className="px-4 py-2 text-[10px] font-bold text-amber-600 uppercase tracking-wider bg-amber-50/50">
-                      ⚠️ {t('lowStock')}
+                      {t('lowStock')}
                     </p>
                     {lowStockProducts.map((p) => (
                       <div key={p.id} className="px-4 py-2.5 flex items-center gap-3 hover:bg-indigo-50/50 transition-colors border-b border-indigo-50">
@@ -139,7 +139,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onMenuClick }) => {
                 {recentSales.length > 0 && (
                   <div>
                     <p className="px-4 py-2 text-[10px] font-bold text-emerald-600 uppercase tracking-wider bg-emerald-50/50">
-                      🛒 Recent Sales
+                      Recent Sales
                     </p>
                     {recentSales.map((s) => (
                       <div key={s.id} className="px-4 py-2.5 flex items-center gap-3 hover:bg-indigo-50/50 transition-colors border-b border-indigo-50">

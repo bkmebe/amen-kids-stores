@@ -95,7 +95,7 @@ async function setup() {
     }
   }
 
-  console.log('⚠️  Note: Cannot auto-create tables via JS client.');
+  console.log('Note: Cannot auto-create tables via JS client.');
   console.log('   Please run the SQL schema manually in Supabase SQL Editor.\n');
   console.log('   Go to: https://supabase.com/dashboard → SQL Editor\n');
 
